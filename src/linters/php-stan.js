@@ -8,11 +8,11 @@ const { removeTrailingPeriod } = require("../utils/string");
 /** @typedef {import('../utils/lint-result').LintResult} LintResult */
 
 /**
- * https://github.com/squizlabs/PHP_CodeSniffer
+ * https://github.com/phpstan/phpstan
  */
-class PHPCodeSniffer {
+class PHPStan {
 	static get name() {
-		return "PHP_CodeSniffer";
+		return "phpstan";
 	}
 
 	/**
@@ -21,14 +21,14 @@ class PHPCodeSniffer {
 	 * @param {string} prefix - Prefix to the lint command
 	 */
 	static async verifySetup(dir, prefix = "") {
-		// Verify that PHP is installed (required to execute phpcs)
+		// Verify that PHP is installed (required to execute phpstan)
 		if (!(await commandExists("php"))) {
 			throw new Error("PHP is not installed");
 		}
 
-		// Verify that phpcs is installed
+		// Verify that phpstan is installed
 		try {
-			run(`${prefix} phpcs --version`, { dir });
+			run(`${prefix} phpstan --version`, { dir });
 		} catch (err) {
 			throw new Error(`${this.name} is not installed`);
 		}
@@ -46,10 +46,10 @@ class PHPCodeSniffer {
 	static lint(dir, extensions, args = "", fix = false, prefix = "") {
 		const extensionsArg = extensions.join(",");
 		if (fix) {
-			core.warning(`${this.name} does not support auto-fixing`);
+			core.warning(`${this.name} does not support auto-fixing ${extensionsArg}`);
 		}
 
-		return run(`${prefix} phpcs --extensions=${extensionsArg} --report=json -q ${args} `, {
+		return run(`${prefix} phpstan analyse ${args} --no-progress --error-format=json`, {
 			dir,
 			ignoreErrors: true,
 		});
@@ -79,17 +79,15 @@ class PHPCodeSniffer {
 			const path = file.indexOf(dir) === 0 ? file.substring(dir.length + 1) : file;
 
 			for (const msg of violations.messages) {
-				const { line, message, source, type } = msg;
+				const { line, message, ignorable,  } = msg;
 
 				const entry = {
 					path,
 					firstLine: line,
 					lastLine: line,
-					message: `${removeTrailingPeriod(message)} (${source})`,
+					message: `${removeTrailingPeriod(message)} `,
 				};
-				if (type === "WARNING") {
-					lintResult.warning.push(entry);
-				} else if (type === "ERROR") {
+				if (ignorable !== false) {
 					lintResult.error.push(entry);
 				}
 			}
@@ -99,4 +97,4 @@ class PHPCodeSniffer {
 	}
 }
 
-module.exports = PHPCodeSniffer;
+module.exports = PHPStan;
