@@ -48,7 +48,7 @@ class PHPStan {
 		if (fix) {
 			core.warning(`${this.name} does not support auto-fixing ${extensionsArg}`);
 		}
-
+		run(`${prefix} phpstan clear-result-cache`)
 		return run(`${prefix} phpstan analyse ${args} --no-progress --error-format=json`, {
 			dir,
 			ignoreErrors: true,
