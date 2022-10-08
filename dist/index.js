@@ -4419,7 +4419,7 @@ class PHPSecurityChecker {
 							path: `composer.json`,
 							firstLine: 0,
 							lastLine: 0,
-							message: `[${cve}] ${dependency} version: ${advisories.version} \n${title} (${link})`,
+							message: `[${cve}] ${dependency} version: ${advisories.version} \n${title} \n${link}`,
 					};
 					lintResult.error.push(entry);
 			}
