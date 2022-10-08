@@ -77,10 +77,10 @@ class PHPSecurityChecker {
 			for(const advisor of advisories.advisories){
 					const { cve, link, title,  } = advisor;
 					const entry = {
-							path: `${dependency} version: ${advisories.version} `,
-							firstLine: cve,
-							lastLine: cve,
-							message: `${title} (${link})`,
+							path: `composer.json`,
+							firstLine: 0,
+							lastLine: 0,
+							message: `[${cve}] ${dependency} version: ${advisories.version} ${title} (${link})`,
 					};
 					lintResult.error.push(entry);
 			}
