@@ -9,6 +9,7 @@ const Golint = require("./golint");
 const Mypy = require("./mypy");
 const Oitnb = require("./oitnb");
 const PHPCodeSniffer = require("./php-codesniffer");
+const PHPSecurityChecker = require("./php-security-checker");
 const PHPStan = require("./php-stan");
 const Prettier = require("./prettier");
 const Pylint = require("./pylint");
@@ -28,6 +29,7 @@ const linters = {
 	mypy: Mypy,
 	php_codesniffer: PHPCodeSniffer,
 	php_stan:PHPStan,
+	php_security_checker:PHPSecurityChecker,
 	pylint: Pylint,
 	rubocop: RuboCop,
 	stylelint: Stylelint,
