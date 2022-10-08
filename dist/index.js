@@ -4405,6 +4405,7 @@ class PHPSecurityChecker {
 		lintResult.isSuccess = output.status === 0;
 
 		let outputJson;
+		core.warning(`Debug report ${output.stdout}`);
 		try {
 			outputJson = JSON.parse(output.stdout);
 		} catch (err) {
@@ -4412,7 +4413,6 @@ class PHPSecurityChecker {
 				`Error parsing ${this.name} JSON output: ${err.message}. Output: "${output.stdout}"`,
 			);
 		}
-
 		for(const [dependency, advisories] of Object.entries(outputJson)){
 			for(const advisor of advisories.advisories){
 					const { cve, link, title,  } = advisor;
@@ -4427,23 +4427,6 @@ class PHPSecurityChecker {
 
 	}
 
-		for (const [file, violations] of Object.entries(outputJson.files)) {
-			const path = file.indexOf(dir) === 0 ? file.substring(dir.length + 1) : file;
-
-			for (const msg of violations.messages) {
-				const { line, message, ignorable,  } = msg;
-
-				const entry = {
-					path,
-					firstLine: line,
-					lastLine: line,
-					message: `${removeTrailingPeriod(message)} `,
-				};
-				if (ignorable !== false) {
-					lintResult.error.push(entry);
-				}
-			}
-		}
 
 		return lintResult;
 	}
