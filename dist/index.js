@@ -4405,7 +4405,6 @@ class PHPSecurityChecker {
 		lintResult.isSuccess = output.status === 0;
 
 		let outputJson;
-		core.warning(`Debug report ${output.stdout}`);
 		try {
 			outputJson = JSON.parse(output.stdout);
 		} catch (err) {
