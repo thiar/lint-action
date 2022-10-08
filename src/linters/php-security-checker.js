@@ -73,7 +73,7 @@ class PHPSecurityChecker {
 				`Error parsing ${this.name} JSON output: ${err.message}. Output: "${output.stdout}"`,
 			);
 		}
-
+		core.warning(`Debug report ${outputJson}`);
 		for(const [dependency, advisories] of Object.entries(outputJson)){
 			for(const advisor of advisories.advisories){
 					const { cve, link, title,  } = advisor;
